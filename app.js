@@ -22,7 +22,7 @@ function appendCertificate(content,d){
   const preview=element('a','','certificate-preview');
   preview.href=`${cert.file}.pdf`;preview.target='_blank';preview.rel='noopener';
   preview.setAttribute('aria-label',`Open ${d.title} certificate PDF in a new tab`);
-  const image=document.createElement('img');image.src=`${cert.file}.png`;
+  const image=document.createElement('img');image.width=1600;image.height=1237;image.src=`${cert.file}.png`;
   image.alt=`Vedesh Emandi — ${d.subtitle} certificate, issued ${cert.issued}`;
   preview.append(image);content.append(preview);
   const actions=element('div','','certificate-actions');
@@ -31,10 +31,30 @@ function appendCertificate(content,d){
   [open,download].forEach(control=>{applyGlass(control);actions.append(control);});
   content.append(actions);
 }
-document.querySelectorAll('[data-detail]').forEach(button=>button.addEventListener('click',()=>{const d=details[button.dataset.detail];if(!d)return;previousFocus=button;document.querySelector('#detail-category').textContent=d.category;document.querySelector('#detail-number').textContent=d.number;document.querySelector('#detail-title').textContent=d.title;document.querySelector('#detail-subtitle').textContent=d.subtitle;const content=document.querySelector('#detail-content');content.replaceChildren(element('p',d.intro));dialog.classList.toggle('certificate-dialog',!!d.certificate);if(d.certificate)appendCertificate(content,d);if(d.heading)content.append(element('h3',d.heading));if(d.points){const list=document.createElement('ul');d.points.forEach(p=>list.append(element('li',p)));content.append(list);}if(d.tags){const tags=element('div','','tags');tags.style.marginTop='28px';d.tags.forEach(t=>tags.append(element('span',t)));content.append(tags);}previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();dialog.scrollTop=0;document.querySelector('.close-dialog').focus();}));
-dialog.querySelectorAll('.close-dialog,.close-text').forEach(b=>b.addEventListener('click',()=>dialog.close()));
-dialog.addEventListener('click',e=>{if(e.target===dialog){const rect=dialog.getBoundingClientRect();if(e.clientX<rect.left||e.clientX>rect.right)dialog.close();}});
-dialog.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;previousFocus?.focus();});
+document.querySelectorAll('[data-detail]').forEach(button=>button.addEventListener('click',()=>{const d=details[button.dataset.detail];if(!d)return;previousFocus=button;document.querySelector('#detail-category').textContent=d.category;document.querySelector('#detail-number').textContent=d.number;document.querySelector('#detail-title').textContent=d.title;document.querySelector('#detail-subtitle').textContent=d.subtitle;const content=document.querySelector('#detail-content');content.replaceChildren(element('p',d.intro));dialog.classList.toggle('certificate-dialog',!!d.certificate);if(d.certificate)appendCertificate(content,d);if(d.heading)content.append(element('h3',d.heading));if(d.points){const list=document.createElement('ul');d.points.forEach(p=>list.append(element('li',p)));content.append(list);}if(d.tags){const tags=element('div','','tags');tags.style.marginTop='28px';d.tags.forEach(t=>tags.append(element('span',t)));content.append(tags);}previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();dialog.scrollTop=0;animateCardOpen(button);document.querySelector('.close-dialog').focus({preventScroll:true});}));
+let cardMotion;let cardClosing=false;
+function cardOrigin(source){
+ const from=source.getBoundingClientRect(),to=dialog.getBoundingClientRect();
+ return `translate(${from.left+from.width/2-to.left-to.width/2}px,${from.top+from.height/2-to.top-to.height/2}px) scale(${Math.max(.12,Math.min(1,from.width/to.width))},${Math.max(.12,Math.min(1,from.height/to.height))}) perspective(1200px) rotateY(-18deg)`;
+}
+function animateCardOpen(source){
+ cardClosing=false;dialog.classList.remove('card-closing');
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ cardMotion=dialog.animate([{transform:cardOrigin(source),opacity:.25},{transform:'translate(0,0) scale(1) rotateY(0deg)',opacity:1}],{duration:560,easing:'cubic-bezier(.2,.8,.2,1)'});
+}
+function closeCard(){
+ if(cardClosing||!dialog.open)return;
+ cardClosing=true;
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches){dialog.close();cardClosing=false;return;}
+ const current=getComputedStyle(dialog).transform;const currentOpacity=getComputedStyle(dialog).opacity;
+ cardMotion?.cancel();dialog.classList.add('card-closing');
+ cardMotion=dialog.animate([{transform:current,opacity:currentOpacity},{transform:cardOrigin(previousFocus),opacity:0}],{duration:380,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
+ cardMotion.finished.then(()=>{dialog.close();cardMotion.cancel();dialog.classList.remove('card-closing');cardClosing=false;}).catch(()=>{});
+}
+dialog.addEventListener('cancel',event=>{event.preventDefault();closeCard();});
+dialog.querySelectorAll('.close-dialog,.close-text').forEach(b=>b.addEventListener('click',()=>closeCard()));
+dialog.addEventListener('click',e=>{if(e.target===dialog){const rect=dialog.getBoundingClientRect();if(e.clientX<rect.left||e.clientX>rect.right||e.clientY<rect.top||e.clientY>rect.bottom)closeCard();}});
+dialog.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;previousFocus?.focus({preventScroll:true});});
 let toastTimer;function toast(text){const t=document.querySelector('#toast');t.textContent=text;t.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('visible'),3200);}
 document.querySelector('#copy-email').addEventListener('click',async()=>{try{await navigator.clipboard.writeText('vedeshemandi@gmail.com');toast('Email address copied.');}catch{toast('Email: vedeshemandi@gmail.com');}});
 document.querySelector('#year').textContent=new Date().getFullYear();

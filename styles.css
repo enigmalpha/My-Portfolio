@@ -65,3 +65,18 @@ a[download].glass-control{display:inline-flex;align-items:center;padding:13px 17
 .certificate-actions{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 32px}
 .certificate-actions .button{font-size:.8rem}
 @media(max-width:600px){.certificate-actions .button{width:100%;justify-content:center}}
+
+/* Shared centered card expansion for every detail trigger. */
+#detail-dialog{inset:0;margin:auto;width:min(720px,calc(100% - 40px));height:fit-content;max-height:calc(100dvh - 48px);border:1px solid #40586a;border-radius:22px;box-shadow:0 30px 120px #0009;transform-origin:center;overscroll-behavior:contain}
+#detail-dialog.certificate-dialog{width:min(1040px,calc(100% - 40px))}
+#detail-dialog[open]{animation:none}
+#detail-dialog::backdrop{animation:card-backdrop-in .45s ease both}
+#detail-dialog.card-closing::backdrop{animation:card-backdrop-out .38s ease both}
+#detail-dialog .dialog-top{flex-shrink:0;position:sticky;top:0;z-index:5;background:#101a28f5;backdrop-filter:blur(16px)}
+@keyframes card-backdrop-in{from{opacity:0}to{opacity:1}}
+@keyframes card-backdrop-out{from{opacity:1}to{opacity:0}}
+@media(max-width:540px){#detail-dialog,#detail-dialog.certificate-dialog{width:calc(100% - 24px);max-height:calc(100dvh - 24px);border-radius:16px}#detail-dialog .dialog-content{padding:24px 20px}#detail-title{font-size:30px}}
+@media(prefers-reduced-motion:reduce){#detail-dialog::backdrop,#detail-dialog.card-closing::backdrop{animation:none}}
+
+html{scrollbar-gutter:stable}
+#detail-dialog{scrollbar-width:thin;scrollbar-color:#476477 #101a28}
