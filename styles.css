@@ -105,3 +105,12 @@ html{scrollbar-gutter:stable}
 .course-picker #course-select:focus-visible{outline-offset:4px;border-radius:12px}
 
 .course-picker.glass-control.glow-dismissed::after{opacity:0}
+
+/* Keep scrolling between the fixed header/footer, inside the rounded shell. */
+#detail-dialog{overflow:hidden}
+#detail-dialog .dialog-content{min-height:0;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;margin-right:8px;scrollbar-width:thin;scrollbar-color:#476477 transparent}
+#detail-dialog .dialog-top,#detail-dialog .dialog-footer{flex:0 0 auto}
+#detail-dialog .dialog-content::-webkit-scrollbar{width:6px}
+#detail-dialog .dialog-content::-webkit-scrollbar-track{background:transparent}
+#detail-dialog .dialog-content::-webkit-scrollbar-thumb{background:#476477;border-radius:10px}
+#detail-dialog .dialog-content::-webkit-scrollbar-thumb:hover{background:#6a9a9e}
