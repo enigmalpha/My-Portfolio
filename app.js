@@ -96,11 +96,11 @@ if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduc
 
 const contactDialog=document.querySelector('#contact-dialog');
 const sayHello=document.querySelector('#say-hello');
-let contactOverflow='';
-sayHello.addEventListener('click',()=>{contactOverflow=document.body.style.overflow;document.body.style.overflow='hidden';contactDialog.showModal();document.querySelector('#close-contact').focus();});
+let contactOverflow='';let contactTrigger=sayHello;
+[sayHello,document.querySelector('#header-connect')].forEach(trigger=>trigger.addEventListener('click',()=>{contactTrigger=trigger;contactOverflow=document.body.style.overflow;document.body.style.overflow='hidden';contactDialog.showModal();document.querySelector('#close-contact').focus({preventScroll:true});}));
 document.querySelector('#close-contact').addEventListener('click',()=>contactDialog.close());
 contactDialog.addEventListener('click',e=>{if(e.target===contactDialog){const r=contactDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)contactDialog.close();}});
-contactDialog.addEventListener('close',()=>{document.body.style.overflow=contactOverflow;sayHello.focus();});
+contactDialog.addEventListener('close',()=>{document.body.style.overflow=contactOverflow;contactTrigger.focus({preventScroll:true});});
 
 // Preserve native downloads and make their otherwise silent response visible.
 document.querySelectorAll('a[download]').forEach(link=>link.addEventListener('click',()=>{
