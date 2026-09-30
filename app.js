@@ -11,7 +11,7 @@ symbiosys:{category:'Internship',number:'02 / SYMBIOSYS TECHNOLOGIES',title:'Fro
 android:{category:'Internship',number:'03 / 1STOP DEVCLUB (IIT DELHI)',title:'Built for the small screen.',subtitle:'Android Development Intern',intro:'Developing mobile applications and connecting them with useful information through APIs.',heading:'Contributions',points:['Developed Android applications using Kotlin and REST APIs.','Built news and weather applications as internship projects.','Improved application stability through testing and debugging.'],tags:['Kotlin','Android','REST APIs','Testing']},
 iga:{category:'Certification',number:'01 / SAVIYNT',title:'Saviynt Advanced IGA',subtitle:'Advanced IGA Professional',certificate:{file:'Saviynt-Advanced-IGA',issued:'September 18, 2025'},intro:'A professional certification in the identity governance domain that complements my hands-on work with Saviynt EIC.',heading:'Related experience',points:['Identity Governance & Administration','Identity lifecycle and access request management','Access certifications and governance operations'],tags:['Saviynt','IGA']},
 aag:{category:'Certification',number:'02 / SAVIYNT',title:'Saviynt AAG',subtitle:'AAG Professional',certificate:{file:'Saviynt-AAG',issued:'August 21, 2026'},intro:'A Saviynt professional certificate listed among my identity and access management credentials.',tags:['Saviynt','AAG']},
-google:{category:'Certification',number:'03 / GOOGLE · COURSERA',title:'Google Data Analytics',subtitle:'Professional Certificate',intro:'Continued learning in data analytics alongside my computer science and IAM experience.',tags:['Google','Data analytics','Coursera']},
+google:{category:'Course certificates',number:'03 / GOOGLE · COURSERA',title:'Google Data Analytics',subtitle:'6 course certificates · Coursera',intro:'Six completed courses authorized by Google and offered through Coursera. Explore each certificate below.',certificates:[{"title": "Foundations: Data, Data, Everywhere", "file": "Google-Data-Analytics-Course-1", "issued": "January 16, 2025"}, {"title": "Ask Questions to Make Data-Driven Decisions", "file": "Google-Data-Analytics-Course-2", "issued": "February 17, 2025"}, {"title": "Prepare Data for Exploration", "file": "Google-Data-Analytics-Course-3", "issued": "March 8, 2025"}, {"title": "Process Data from Dirty to Clean", "file": "Google-Data-Analytics-Course-4", "issued": "March 12, 2025"}, {"title": "Analyze Data to Answer Questions", "file": "Google-Data-Analytics-Course-5", "issued": "April 17, 2025"}, {"title": "Share Data Through the Art of Visualization", "file": "Google-Data-Analytics-Course-6", "issued": "April 24, 2025"}],tags:['Google','Data analytics','Coursera']},
 accenture:{category:'Job simulation',number:'04 / ACCENTURE · FORAGE',title:'Data Analytics & Visualization',subtitle:'Accenture Job Simulation · Forage',certificate:{file:'Accenture-Certificate',issued:'May 22, 2024',width:1600,height:1131},heading:'Practical tasks completed',points:['Project understanding','Data cleaning & modeling','Data visualization & storytelling','Presenting to the client'],intro:'A learning experience in data analytics and visualization, completed through Forage.',tags:['Accenture','Data analytics','Visualization','Forage']}
 };
 const dialog=document.querySelector('#detail-dialog');let previousFocus;let previousOverflow='';
@@ -31,7 +31,33 @@ function appendCertificate(content,d){
   [open,download].forEach(control=>{applyGlass(control);actions.append(control);});
   content.append(actions);
 }
-document.querySelectorAll('[data-detail]').forEach(button=>button.addEventListener('click',()=>{const d=details[button.dataset.detail];if(!d)return;previousFocus=button;document.querySelector('#detail-category').textContent=d.category;document.querySelector('#detail-number').textContent=d.number;document.querySelector('#detail-title').textContent=d.title;document.querySelector('#detail-subtitle').textContent=d.subtitle;const content=document.querySelector('#detail-content');content.replaceChildren(element('p',d.intro));dialog.classList.toggle('certificate-dialog',!!d.certificate);if(d.certificate)appendCertificate(content,d);if(d.heading)content.append(element('h3',d.heading));if(d.points){const list=document.createElement('ul');d.points.forEach(p=>list.append(element('li',p)));content.append(list);}if(d.tags){const tags=element('div','','tags');tags.style.marginTop='28px';d.tags.forEach(t=>tags.append(element('span',t)));content.append(tags);}previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();dialog.scrollTop=0;animateCardOpen(button);document.querySelector('.close-dialog').focus({preventScroll:true});}));
+function appendCourseGallery(content,d){
+  const gallery=element('section','','course-gallery');
+  const label=element('label','Choose a course','course-label');label.htmlFor='course-select';
+  const select=document.createElement('select');select.id='course-select';
+  d.certificates.forEach((cert,i)=>{const option=element('option',`${String(i+1).padStart(2,'0')} / ${cert.title}`);option.value=i;select.append(option);});
+  const navigation=element('div','','course-navigation');
+  const prev=element('button','← Previous','button');prev.type='button';prev.setAttribute('aria-label','Previous course certificate');
+  const next=element('button','Next →','button');next.type='button';next.setAttribute('aria-label','Next course certificate');
+  const count=element('span','','course-count');count.setAttribute('aria-live','polite');count.setAttribute('aria-atomic','true');
+  [prev,next].forEach(applyGlass);navigation.append(prev,count,next);
+  const title=element('h3','','course-title');title.id='course-title';
+  const viewer=element('div','','course-viewer');viewer.setAttribute('aria-labelledby','course-title');
+  gallery.append(label,select,navigation,title,viewer);content.append(gallery);
+  let current=0;let transition;
+  function showCourse(index,animate=true){
+    current=Math.max(0,Math.min(d.certificates.length-1,index));const cert=d.certificates[current];
+    select.value=String(current);count.textContent=`${current+1} of ${d.certificates.length}`;
+    prev.disabled=current===0;next.disabled=current===d.certificates.length-1;title.textContent=cert.title;
+    transition?.cancel();viewer.replaceChildren();appendCertificate(viewer,{title:cert.title,subtitle:cert.title,certificate:cert});
+    if(animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches){transition=viewer.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:280,easing:'ease-out'});}
+    const adjacent=d.certificates[current+1];if(adjacent){const preload=new Image();preload.src=`${adjacent.file}.png`;}
+  }
+  select.addEventListener('change',()=>showCourse(Number(select.value)));
+  prev.addEventListener('click',()=>showCourse(current-1));next.addEventListener('click',()=>showCourse(current+1));
+  showCourse(0,false);
+}
+document.querySelectorAll('[data-detail]').forEach(button=>button.addEventListener('click',()=>{const d=details[button.dataset.detail];if(!d)return;previousFocus=button;document.querySelector('#detail-category').textContent=d.category;document.querySelector('#detail-number').textContent=d.number;document.querySelector('#detail-title').textContent=d.title;document.querySelector('#detail-subtitle').textContent=d.subtitle;const content=document.querySelector('#detail-content');content.replaceChildren(element('p',d.intro));dialog.classList.toggle('certificate-dialog',!!(d.certificate||d.certificates));if(d.certificate)appendCertificate(content,d);if(d.certificates)appendCourseGallery(content,d);if(d.heading)content.append(element('h3',d.heading));if(d.points){const list=document.createElement('ul');d.points.forEach(p=>list.append(element('li',p)));content.append(list);}if(d.tags){const tags=element('div','','tags');tags.style.marginTop='28px';d.tags.forEach(t=>tags.append(element('span',t)));content.append(tags);}previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();dialog.scrollTop=0;animateCardOpen(button);document.querySelector('.close-dialog').focus({preventScroll:true});}));
 let cardMotion;let cardClosing=false;
 function cardOrigin(source){
  const from=source.getBoundingClientRect(),to=dialog.getBoundingClientRect();

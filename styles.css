@@ -80,3 +80,14 @@ a[download].glass-control{display:inline-flex;align-items:center;padding:13px 17
 
 html{scrollbar-gutter:stable}
 #detail-dialog{scrollbar-width:thin;scrollbar-color:#476477 #101a28}
+
+.course-label{display:block;font-size:12px;letter-spacing:.06em;color:var(--mint);margin:28px 0 10px}
+#course-select{display:block;width:100%;min-height:52px;border:1px solid #466372;border-radius:10px;background:#142331;color:var(--text);padding:12px 16px;font:inherit;font-size:14px;cursor:pointer}
+#course-select:focus-visible{outline:2px solid var(--mint);outline-offset:4px}
+.course-navigation{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 24px}
+.course-navigation .button{padding:10px 16px;font-size:12px}
+.course-navigation button:disabled{opacity:.35;cursor:default;pointer-events:none}
+.course-count{font-size:12px;color:var(--muted);white-space:nowrap}
+#detail-content .course-title{font-size:23px;line-height:1.4;margin:20px 0 10px;min-height:2.8em}
+.course-viewer .certificate-preview{margin-top:18px}
+@media(max-width:540px){#course-select{font-size:12px;padding:12px 8px}.course-navigation .button{padding:10px 12px}#detail-content .course-title{font-size:20px}}
