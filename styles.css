@@ -106,6 +106,9 @@ html{scrollbar-gutter:stable}
 
 .course-picker.glass-control.glow-dismissed::after{opacity:0}
 
+/* Optically center the lowercase mark beside the uppercase name. */
+.brand .brand-mark{position:relative;top:-3px}
+
 /* Keep scrolling between the fixed header/footer, inside the rounded shell. */
 #detail-dialog{overflow:hidden}
 #detail-dialog .dialog-content{min-height:0;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;margin-right:8px;scrollbar-width:thin;scrollbar-color:#476477 transparent}
