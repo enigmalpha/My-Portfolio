@@ -43,7 +43,14 @@ function appendCourseGallery(content,d){
   [prev,next].forEach(applyGlass);navigation.append(prev,count,next);
   const title=element('h3','','course-title');title.id='course-title';
   const viewer=element('div','','course-viewer');viewer.setAttribute('aria-labelledby','course-title');
-  const picker=element('div','','course-picker');applyGlass(picker);picker.append(select);gallery.append(label,picker,navigation,title,viewer);content.append(gallery);
+  const picker=element('div','','course-picker');applyGlass(picker);picker.append(select);
+  const dismissPickerGlow=()=>picker.classList.add('glow-dismissed');
+  select.addEventListener('pointerdown',dismissPickerGlow);
+  select.addEventListener('click',dismissPickerGlow);
+  select.addEventListener('change',dismissPickerGlow);
+  select.addEventListener('keydown',dismissPickerGlow);
+  picker.addEventListener('pointerenter',()=>picker.classList.remove('glow-dismissed'));
+  picker.addEventListener('pointermove',()=>{if(document.activeElement!==select)picker.classList.remove('glow-dismissed');});gallery.append(label,picker,navigation,title,viewer);content.append(gallery);
   let current=0;let transition;
   function showCourse(index,animate=true){
     current=Math.max(0,Math.min(d.certificates.length-1,index));const cert=d.certificates[current];

@@ -99,7 +99,9 @@ html{scrollbar-gutter:stable}
 .course-picker.glass-control{border-radius:12px;background:linear-gradient(145deg,#c5ffe91c,#6dddaf0c 48%,#2dbd9016);border-color:#b0ffde50}
 .course-picker.glass-control:active{transform:none}
 .course-picker:focus-within{border-color:#b0ffdf88;box-shadow:inset 0 1px 0 #ecfff980,0 0 24px #6bfcc91c,0 12px 30px #00000035}
-.course-picker:focus-within::after{opacity:1}
+.course-picker:focus-within::after{opacity:0}
 .course-picker #course-select{border:0;border-radius:inherit;background-color:transparent;color:#e5fff4;min-height:54px;padding-left:18px;box-shadow:none}
 .course-picker #course-select option{background:#142331;color:#e5fff4}
 .course-picker #course-select:focus-visible{outline-offset:4px;border-radius:12px}
+
+.course-picker.glass-control.glow-dismissed::after{opacity:0}
