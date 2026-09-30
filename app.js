@@ -12,7 +12,7 @@ android:{category:'Internship',number:'03 / 1STOP DEVCLUB (IIT DELHI)',title:'Bu
 iga:{category:'Certification',number:'01 / SAVIYNT',title:'Saviynt Advanced IGA',subtitle:'Advanced IGA Professional',certificate:{file:'Saviynt-Advanced-IGA',issued:'September 18, 2025'},intro:'A professional certification in the identity governance domain that complements my hands-on work with Saviynt EIC.',heading:'Related experience',points:['Identity Governance & Administration','Identity lifecycle and access request management','Access certifications and governance operations'],tags:['Saviynt','IGA']},
 aag:{category:'Certification',number:'02 / SAVIYNT',title:'Saviynt AAG',subtitle:'AAG Professional',certificate:{file:'Saviynt-AAG',issued:'August 21, 2026'},intro:'A Saviynt professional certificate listed among my identity and access management credentials.',tags:['Saviynt','AAG']},
 google:{category:'Certification',number:'03 / GOOGLE · COURSERA',title:'Google Data Analytics',subtitle:'Professional Certificate',intro:'Continued learning in data analytics alongside my computer science and IAM experience.',tags:['Google','Data analytics','Coursera']},
-accenture:{category:'Job simulation',number:'04 / ACCENTURE · FORAGE',title:'Data Analytics & Visualization',subtitle:'Accenture Job Simulation · Forage',intro:'A learning experience in data analytics and visualization, completed through Forage.',tags:['Accenture','Data analytics','Visualization','Forage']}
+accenture:{category:'Job simulation',number:'04 / ACCENTURE · FORAGE',title:'Data Analytics & Visualization',subtitle:'Accenture Job Simulation · Forage',certificate:{file:'Accenture-Certificate',issued:'May 22, 2024',width:1600,height:1131},heading:'Practical tasks completed',points:['Project understanding','Data cleaning & modeling','Data visualization & storytelling','Presenting to the client'],intro:'A learning experience in data analytics and visualization, completed through Forage.',tags:['Accenture','Data analytics','Visualization','Forage']}
 };
 const dialog=document.querySelector('#detail-dialog');let previousFocus;let previousOverflow='';
 function element(tag,text,className){const e=document.createElement(tag);e.textContent=text;if(className)e.className=className;return e;}
@@ -22,7 +22,7 @@ function appendCertificate(content,d){
   const preview=element('a','','certificate-preview');
   preview.href=`${cert.file}.pdf`;preview.target='_blank';preview.rel='noopener';
   preview.setAttribute('aria-label',`Open ${d.title} certificate PDF in a new tab`);
-  const image=document.createElement('img');image.width=1600;image.height=1237;image.src=`${cert.file}.png`;
+  const image=document.createElement('img');image.width=cert.width||1600;image.height=cert.height||1237;image.src=`${cert.file}.png`;
   image.alt=`Vedesh Emandi — ${d.subtitle} certificate, issued ${cert.issued}`;
   preview.append(image);content.append(preview);
   const actions=element('div','','certificate-actions');
