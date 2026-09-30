@@ -9,14 +9,29 @@ operations:{category:'Technical toolkit',number:'04 / EVERYDAY IMPACT',title:'Op
 assistant:{category:'Personal project',number:'01 / VOICE ASSISTANT',title:'Speak. Simplify.',subtitle:'A desktop voice assistant built with Python.',intro:'A project exploring how natural language input can make everyday computer tasks more convenient.',heading:'What I built',points:['Combined speech recognition and text-to-speech libraries in a desktop assistant.','Integrated external APIs for web searches and weather updates.','Added application control through voice commands.','Focused on automating routine tasks and improving user interaction.'],tags:['Python','Speech recognition','Text-to-speech','External APIs']},
 symbiosys:{category:'Internship',number:'02 / SYMBIOSYS TECHNOLOGIES',title:'From design to interface.',subtitle:'UI/UX & Web Development Intern',intro:'Working across interface design and front-end implementation.',heading:'Contributions',points:['Designed responsive web interfaces using Figma.','Collaborated on front-end implementation with ReactJS.','Worked with the development team to improve user experience and translate design concepts into functional web pages.'],tags:['Figma','ReactJS','Responsive design','UI/UX']},
 android:{category:'Internship',number:'03 / 1STOP DEVCLUB (IIT DELHI)',title:'Built for the small screen.',subtitle:'Android Development Intern',intro:'Developing mobile applications and connecting them with useful information through APIs.',heading:'Contributions',points:['Developed Android applications using Kotlin and REST APIs.','Built news and weather applications as internship projects.','Improved application stability through testing and debugging.'],tags:['Kotlin','Android','REST APIs','Testing']},
-iga:{category:'Certification',number:'01 / SAVIYNT',title:'Saviynt IGA',subtitle:'Professional Certification',intro:'A professional certification in the identity governance domain that complements my hands-on work with Saviynt EIC.',heading:'Related experience',points:['Identity Governance & Administration','Identity lifecycle and access request management','Access certifications and governance operations'],tags:['Saviynt','IGA']},
-aag:{category:'Certification',number:'02 / SAVIYNT',title:'Saviynt AAG',subtitle:'Professional Certificate',intro:'A Saviynt professional certificate listed among my identity and access management credentials.',tags:['Saviynt','AAG']},
+iga:{category:'Certification',number:'01 / SAVIYNT',title:'Saviynt Advanced IGA',subtitle:'Advanced IGA Professional',certificate:{file:'Saviynt-Advanced-IGA',issued:'September 18, 2025'},intro:'A professional certification in the identity governance domain that complements my hands-on work with Saviynt EIC.',heading:'Related experience',points:['Identity Governance & Administration','Identity lifecycle and access request management','Access certifications and governance operations'],tags:['Saviynt','IGA']},
+aag:{category:'Certification',number:'02 / SAVIYNT',title:'Saviynt AAG',subtitle:'AAG Professional',certificate:{file:'Saviynt-AAG',issued:'August 21, 2026'},intro:'A Saviynt professional certificate listed among my identity and access management credentials.',tags:['Saviynt','AAG']},
 google:{category:'Certification',number:'03 / GOOGLE · COURSERA',title:'Google Data Analytics',subtitle:'Professional Certificate',intro:'Continued learning in data analytics alongside my computer science and IAM experience.',tags:['Google','Data analytics','Coursera']},
 accenture:{category:'Job simulation',number:'04 / ACCENTURE · FORAGE',title:'Data Analytics & Visualization',subtitle:'Accenture Job Simulation · Forage',intro:'A learning experience in data analytics and visualization, completed through Forage.',tags:['Accenture','Data analytics','Visualization','Forage']}
 };
 const dialog=document.querySelector('#detail-dialog');let previousFocus;let previousOverflow='';
 function element(tag,text,className){const e=document.createElement(tag);e.textContent=text;if(className)e.className=className;return e;}
-document.querySelectorAll('[data-detail]').forEach(button=>button.addEventListener('click',()=>{const d=details[button.dataset.detail];if(!d)return;previousFocus=button;document.querySelector('#detail-category').textContent=d.category;document.querySelector('#detail-number').textContent=d.number;document.querySelector('#detail-title').textContent=d.title;document.querySelector('#detail-subtitle').textContent=d.subtitle;const content=document.querySelector('#detail-content');content.replaceChildren(element('p',d.intro));if(d.heading)content.append(element('h3',d.heading));if(d.points){const list=document.createElement('ul');d.points.forEach(p=>list.append(element('li',p)));content.append(list);}if(d.tags){const tags=element('div','','tags');tags.style.marginTop='28px';d.tags.forEach(t=>tags.append(element('span',t)));content.append(tags);}previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();dialog.scrollTop=0;document.querySelector('.close-dialog').focus();}));
+function appendCertificate(content,d){
+  const cert=d.certificate;
+  content.append(element('p',`Issued ${cert.issued}`,'certificate-issued'));
+  const preview=element('a','','certificate-preview');
+  preview.href=`${cert.file}.pdf`;preview.target='_blank';preview.rel='noopener';
+  preview.setAttribute('aria-label',`Open ${d.title} certificate PDF in a new tab`);
+  const image=document.createElement('img');image.src=`${cert.file}.png`;
+  image.alt=`Vedesh Emandi — ${d.subtitle} certificate, issued ${cert.issued}`;
+  preview.append(image);content.append(preview);
+  const actions=element('div','','certificate-actions');
+  const open=element('a','Open PDF ↗','button');open.href=preview.href;open.target='_blank';open.rel='noopener';
+  const download=element('a','Download certificate ↓','button');download.href=preview.href;download.download=`${cert.file}.pdf`;
+  [open,download].forEach(control=>{applyGlass(control);actions.append(control);});
+  content.append(actions);
+}
+document.querySelectorAll('[data-detail]').forEach(button=>button.addEventListener('click',()=>{const d=details[button.dataset.detail];if(!d)return;previousFocus=button;document.querySelector('#detail-category').textContent=d.category;document.querySelector('#detail-number').textContent=d.number;document.querySelector('#detail-title').textContent=d.title;document.querySelector('#detail-subtitle').textContent=d.subtitle;const content=document.querySelector('#detail-content');content.replaceChildren(element('p',d.intro));dialog.classList.toggle('certificate-dialog',!!d.certificate);if(d.certificate)appendCertificate(content,d);if(d.heading)content.append(element('h3',d.heading));if(d.points){const list=document.createElement('ul');d.points.forEach(p=>list.append(element('li',p)));content.append(list);}if(d.tags){const tags=element('div','','tags');tags.style.marginTop='28px';d.tags.forEach(t=>tags.append(element('span',t)));content.append(tags);}previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();dialog.scrollTop=0;document.querySelector('.close-dialog').focus();}));
 dialog.querySelectorAll('.close-dialog,.close-text').forEach(b=>b.addEventListener('click',()=>dialog.close()));
 dialog.addEventListener('click',e=>{if(e.target===dialog){const rect=dialog.getBoundingClientRect();if(e.clientX<rect.left||e.clientX>rect.right)dialog.close();}});
 dialog.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;previousFocus?.focus();});
@@ -41,7 +56,7 @@ document.querySelectorAll('a[download]').forEach(link=>link.addEventListener('cl
 }));
 // Local light follows the pointer without moving the button or its text.
 const glassControls=document.querySelectorAll('button,.button,.header-contact,.contact-option,a[download]');
-glassControls.forEach(control=>{
+function applyGlass(control){
   control.classList.add('glass-control');
   const positionGlow=event=>{
     if(event.pointerType==='touch')return;
@@ -53,7 +68,8 @@ glassControls.forEach(control=>{
   control.addEventListener('pointermove',positionGlow);
   // Keep the last position during fade-out: resetting it would flash the center.
 
-});
+}
+glassControls.forEach(applyGlass);
 
 // Preview a connection on hover/focus; native buttons open its detail flyout.
 const ecosystem=document.querySelector('.identity-map');

@@ -56,3 +56,12 @@ a[download].glass-control{display:inline-flex;align-items:center;padding:13px 17
 .identity-map .map-footer{min-height:74px;padding:15px 20px;font-size:12px;line-height:1.5;letter-spacing:0;text-transform:none;color:#b8d9ce}
 .identity-map .map-core small{font-size:8px;letter-spacing:1px;text-align:center}
 @media(max-width:540px){.identity-map .map-field{grid-template-rows:90px 110px 90px;gap:6px;padding:12px 8px}.identity-map .map-core strong{font-size:19px}.identity-map .map-core small{font-size:7px;letter-spacing:.6px}.identity-map .map-node{font-size:11px;min-height:76px}.identity-map .map-node small{font-size:9px}.identity-map .map-footer{padding:14px;font-size:12px}.identity-map .core-icon svg{width:27px;height:27px}}
+
+/* Certificate previews retain their original proportions on every screen. */
+#detail-dialog.certificate-dialog{width:min(900px,100vw)}
+.certificate-issued{font-size:.8rem;color:var(--mint,#a0f4d1)}
+.certificate-preview{display:block;margin:24px 0;border-radius:12px;overflow:hidden;border:1px solid rgba(160,244,209,.25);background:#fff}
+.certificate-preview img{display:block;width:100%;height:auto}
+.certificate-actions{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 32px}
+.certificate-actions .button{font-size:.8rem}
+@media(max-width:600px){.certificate-actions .button{width:100%;justify-content:center}}
